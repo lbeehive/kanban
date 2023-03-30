@@ -7,8 +7,8 @@ import reportWebVitals from './reportWebVitals';
 //format(new Date(), "MM-dd-yyyy")
 const DATA = [
   { id: uuidv4(), name: "Eat", date: new Date(), completed: true },
-  { id: "todo-1", name: "Sleep", dateAdded: Date.parse('01 Jan 1960 00:00:00 GMT'), completed: false },
-  { id: "todo-2", name: "Repeat", dateAdded: Date.now(), completed: false }
+  { id: uuidv4(), name: "Sleep",date: new Date(), completed: false },
+  { id: uuidv4(), name: "Repeat", date: new Date(), completed: false }
 ];
 const sortedData = DATA.sort((a, b) => b.dateAdded - a.dateAdded);
 
