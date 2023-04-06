@@ -4,22 +4,27 @@ import Form from "./components/Form";
 import Todo from "./components/Todo";
 import { v4 as uuid } from 'uuid';
 //import { format } from 'date-fns';
-
+//const uniqueId = () => "todo-"+parseInt(Date.now() * Math.random()).toString();
+//setTasks([...tasks, newTask].sort((a, b) => b.name > a.name ? 1 : -1,));
+/*
+    const editedTaskList = [...tasks];
+    const index = tasks.findIndex(Todo => Todo.id === id);
+    editedTaskList[index].name = newName;
+    */
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
   
   function addTask(name) {
-    //const uniqueId = () => "todo-"+parseInt(Date.now() * Math.random()).toString();
+    
     const uniqueid_full = uuid();
-    const uniqueId = uniqueid_full.slice(0,8);
-    const newTask = { id: uniqueId, name, dateAdded: Date.now(), completed: false };
-    //setTasks([...tasks, newTask].sort((a, b) => b.name > a.name ? 1 : -1,));
+    const uniqueId = uniqueid_full.slice(0,10);
+    const newTask = { id: uniqueId, name: name, dateAdded: Date.now(), completed: false };
     setTasks([...tasks, newTask].sort((a, b) => b.dateAdded - a.dateAdded));
   }
 
   function toggleTaskCompleted(id) {
     const updatedTasks = tasks.map((task) => {
-      // if this task has the same ID as the edited task
+      // does this task has the same ID as the edited task?
       if (id === task.id) {
         // use object spread to make a new object
         // whose `completed` prop has been inverted
@@ -35,19 +40,22 @@ function App(props) {
     setTasks(remainingTasks);
   }
 
-  /*editTask for later
   function editTask(id, newName) {
+   
     const editedTaskList = tasks.map((task) => {
-    // if this task has the same ID as the edited task
+    //does this task has the same ID as the edited task?
       if (id === task.id) {
         //
         return {...task, name: newName}
       }
+      
       return task;
+      
     });
     setTasks(editedTaskList);
+    
   }
-*/
+
   const taskList = tasks.map((task) => (
     <Todo
       id={task.id}
@@ -57,7 +65,7 @@ function App(props) {
       key={task.id}
       toggleTaskCompleted={toggleTaskCompleted}
       deleteTask={deleteTask}
-      //editTask={editTask}
+      editTask={editTask}
     />
 
   ));
