@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import Form from "./components/Form";
-//import Search from "./components/Search";
+import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import { v4 as uuid } from 'uuid';
+//import Search from "./components/Search";
 //import { format } from 'date-fns';
 //const uniqueId = () => "todo-"+parseInt(Date.now() * Math.random()).toString();
 //setTasks([...tasks, newTask].sort((a, b) => b.name > a.name ? 1 : -1,));
@@ -11,8 +12,19 @@ import { v4 as uuid } from 'uuid';
     const index = tasks.findIndex(Todo => Todo.id === id);
     editedTaskList[index].name = newName;
     */
+
+const Filter_Map = {
+  All: () => true,
+  Active: (task) => !task.completed,
+  Completed: (task) => task.completed
+};
+
+const Filter_Names = Object.keys(Filter_Map);
+
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
+
+  const [filter, setFilter] = useState('All');
   
   function addTask(name) {
     
@@ -56,7 +68,9 @@ function App(props) {
     
   }
 
-  const taskList = tasks.map((task) => (
+  const taskList = tasks
+  .filter(Filter_Map[filter])
+  .map((task) => (
     <Todo
       id={task.id}
       name={task.name}
@@ -67,32 +81,24 @@ function App(props) {
       deleteTask={deleteTask}
       editTask={editTask}
     />
+    ));
+    
+    const filterList = Filter_Names.map((name) => (
+      <FilterButton
+        key={name}
+        name={name}
+        isPressed={name === filter}
+        setFilter={setFilter}
+      />
+    ));
 
-  ));
   return (
     <div className="todoapp stack-large">
       <h1>To Do List</h1>
       <Form addTask={addTask} />
-      
-      <ul
-        className="todo-list stack-large stack-exception"
-        aria-labelledby="list-heading"
-      >
-        {taskList}
-      </ul>
-    </div>
-  );
-/* Search button for later
-  return (
-    <div className="todoapp stack-large">
-      <h1>To Do List</h1>
-      <Form addTask={addTask} />
-      
       <div className="filters btn-group stack-exception">
-        <Search />
-        
+        {filterList}
       </div>
-      
       <ul
         className="todo-list stack-large stack-exception"
         aria-labelledby="list-heading"
@@ -101,6 +107,6 @@ function App(props) {
       </ul>
     </div>
   );
-*/
+
 }
 export default App;
